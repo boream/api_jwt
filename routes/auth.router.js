@@ -3,6 +3,7 @@ const logger = require('logger');
 const bcrypt = require('bcrypt');
 const passport = require('koa-passport');
 const UserModel = require('models/user.model');
+const jsonwebtoken = require('jsonwebtoken');
 
 class AuthRouter {
     static async createUser(ctx) {
@@ -41,8 +42,13 @@ class AuthRouter {
         ctx.status = 201; // devolvemos status de creado
     }
 
-    static async loginUser(ctx) {
-
+    static async generateToken(ctx) {
+        const user = ctx.state.user;
+        const token = jsonwebtoken.sign({
+            email: user.email,
+            _id: user._id
+        }, '1234');
+        ctx.body = token;
     }
 }
 
@@ -51,9 +57,6 @@ router.post('/sign-up', AuthRouter.createUser);
 router.post(
     '/login', 
     passport.authenticate('local', { session: false }),
-    async (ctx) => {
-        // TODO devolver el bearer token
-        ctx.body = ctx.state.user;
-    }
+    AuthRouter.generateToken
 )
 module.exports = router;
