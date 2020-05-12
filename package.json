@@ -1,0 +1,19 @@
+{
+  "name": "api_jwt",
+  "version": "1.0.0",
+  "description": "Api example with koa, local authentication and jwt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boream/api_jwt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/boream/api_jwt/issues"
+  },
+  "homepage": "https://github.com/boream/api_jwt#readme"
+}
