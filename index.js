@@ -10,6 +10,7 @@ const jwt = require('koa-jwt');
 const mongoose = require('mongoose');
 
 const authRouter = require('routes/auth.router');
+const userRouter = require('routes/user.router');
 
 const mongoUri = 'mongodb://localhost:27017/jwt-db';
 
@@ -50,6 +51,29 @@ const OnDBReady = (err) => {
     app.use(passport.initialize());
 
     app.use(authRouter.routes());
+
+    // Las rutas protegidas
+
+    // recuperar token desde el header Authorization
+    app.use(jwt({
+        secret:'1234',
+        passthrough: true
+    }));
+
+    // middleware para proteger rutas
+    app.use(async (ctx, next) => {
+        // TODO mirar que el usuario esta en la bbdd
+        if (!ctx.isAuthenticated()) {
+            ctx.body = {
+                msg: 'User is not authorizated'
+            }
+            ctx.status = 401;
+            return;
+        }
+        await next();
+    });
+
+    app.use(mount('/api/v1', userRouter.routes()));
 
     app.listen(3000, function (err) {
         if (err) {
