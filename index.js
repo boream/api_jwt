@@ -44,6 +44,11 @@ const OnDBReady = (err) => {
     // Decorar la aplicacion con metodos para validar
     validate(app);
 
+    // Registramos la estrategia local y la forma de authenticar 
+    // al usuario a traves de la bbdd
+    require('services/auth.service');
+    app.use(passport.initialize());
+
     app.use(authRouter.routes());
 
     app.listen(3000, function (err) {

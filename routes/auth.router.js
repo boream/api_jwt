@@ -1,6 +1,7 @@
 const Router = require('@koa/router');
 const logger = require('logger');
 const bcrypt = require('bcrypt');
+const passport = require('koa-passport');
 const UserModel = require('models/user.model');
 
 class AuthRouter {
@@ -39,8 +40,20 @@ class AuthRouter {
         ctx.body = user; // devolvemos usuario creado
         ctx.status = 201; // devolvemos status de creado
     }
+
+    static async loginUser(ctx) {
+
+    }
 }
 
 const router = new Router({ prefix: '/auth' });
 router.post('/sign-up', AuthRouter.createUser);
+router.post(
+    '/login', 
+    passport.authenticate('local', { session: false }),
+    async (ctx) => {
+        // TODO devolver el bearer token
+        ctx.body = ctx.state.user;
+    }
+)
 module.exports = router;
