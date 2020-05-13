@@ -11,6 +11,7 @@ const mongoose = require('mongoose');
 
 const authRouter = require('routes/auth.router');
 const userRouter = require('routes/user.router');
+const filmRouter = require('routes/film.router');
 
 const mongoUri = 'mongodb://localhost:27017/jwt-db';
 
@@ -74,6 +75,7 @@ const OnDBReady = (err) => {
     });
 
     app.use(mount('/api/v1', userRouter.routes()));
+    app.use(mount('/api/v1', filmRouter.routes()));
 
     app.listen(3000, function (err) {
         if (err) {
@@ -88,7 +90,8 @@ mongoose.connect(
     mongoUri,
     {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useCreateIndex: true
     },
     OnDBReady
 );
