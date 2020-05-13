@@ -48,15 +48,23 @@ class AuthRouter {
             email: user.email,
             _id: user._id
         }, '1234');
-        ctx.body = token;
+        ctx.body = { token };
+    }
+
+    static async loginUserNotFound(ctx) {
+        ctx.body = {
+            msg: 'User does not exist'
+        };
+        ctx.status = 404;
     }
 }
 
 const router = new Router({ prefix: '/auth' });
 router.post('/sign-up', AuthRouter.createUser);
+router.get('/user-not-found', AuthRouter.loginUserNotFound);
 router.post(
     '/login', 
-    passport.authenticate('local', { session: false }),
+    passport.authenticate('local', { session: false, failureRedirect: '/auth/user-not-found' }),
     AuthRouter.generateToken
 )
 module.exports = router;

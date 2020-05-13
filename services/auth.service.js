@@ -7,14 +7,14 @@ async function registerLocal(email, password, done) {
     const user = await UserModel.findOne({ email, provider: 'local' });
 
     if (!user) {
-        done(null, false);
+        done(null, false, { message: 'User does not exist' });
         return;
     }
 
     const hashPassword = await bcrypt.hash(password, user.salt);
 
     if (hashPassword !== user.password) {
-        done(null, false);
+        done(null, false, { message: 'Password is incorrect' });
         return;
     }
 
